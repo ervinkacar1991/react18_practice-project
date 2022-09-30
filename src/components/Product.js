@@ -1,13 +1,19 @@
 import React from "react";
 
 const Product = (props) => {
-  const { product } = props;
+  const { product, onAdd, onRemove } = props;
   return (
     <div className="cart">
       <img className="small" src={product.image} alt={product.name} />
       <h3>{product.name}</h3>
       <div>{product.price} $</div>
-      <button>Add To Cart</button>
+      <button
+        onClick={() => {
+          onAdd(product);
+        }}
+      >
+        Add To Cart
+      </button>
     </div>
   );
 };
