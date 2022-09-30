@@ -6,28 +6,41 @@ import data from "./data";
 
 function App() {
   const [cartItems, setCartItems] = useState([]);
+  const { products } = data;
   const onAdd = (product) => {
-    const exist = cartItems.find((item) => item.id === product.id);
+    const exist = cartItems.find((x) => x.id === product.id);
     if (exist) {
-      const newCartItems = cartItems.map((item) =>
-        item.id === product.id ? { ...exist, quantity: exist.qty + 1 } : item
+      setCartItems(
+        cartItems.map((x) =>
+          x.id === product.id ? { ...exist, qty: exist.qty + 1 } : x
+        )
       );
-      setCartItems(newCartItems);
     } else {
-      if (!exist) {
-        const newCartItems = [...cartItems, { ...product, quantity: 1 }];
-        setCartItems(newCartItems);
-      }
+      setCartItems([...cartItems, { ...product, qty: 1 }]);
     }
   };
-
-  const onRemove = (product) => {};
-  const { products } = data;
+  const onRemove = (product) => {
+    const exist = cartItems.find((x) => x.id === product.id);
+    if (exist.qty === 1) {
+      setCartItems(cartItems.filter((x) => x.id !== product.id));
+    } else {
+      setCartItems(
+        cartItems.map((x) =>
+          x.id === product.id ? { ...exist, qty: exist.qty - 1 } : x
+        )
+      );
+    }
+  };
   return (
     <div>
       <Header countCartItems={cartItems.length} />
       <div className="row">
-        <Main onAdd={onAdd} onRemove={onRemove} products={products} />
+        <Main
+          cartItems={cartItems}
+          onAdd={onAdd}
+          onRemove={onRemove}
+          products={products}
+        />
         <Basket />
       </div>
     </div>
